@@ -1,17 +1,17 @@
 import mysql.connector
 
-conexao = mysql.connector.connect(
+cnx = mysql.connector.connect(
     host="localhost",
     user="root",
     port = 3306,
-    password="new_password",
+    password="password",
 )
 
-cursor = conexao.cursor()
+cursor = cnx.cursor()
 
-cursor.execute('create database if not exists movie_ctalog')
+cursor.execute('create database if not exists movie_catalog')
 cursor.execute('use movie_catalog')
-cursor.execute("""create table if not exists movie(
+cursor.execute("""create table if not exists movies(
                 id int(11) not null auto_increment,
                 title varchar(100) not null,
                 year int not null,
@@ -22,7 +22,7 @@ cursor.execute("""create table if not exists movie(
 
 # inserindo jogos
 cursor.executemany(
-    'INSERT INTO movie_catalog.movie (title, year, sinopse) VALUES (%s, %s, %s)',
+    'INSERT INTO movie_catalog.movies (title, year, sinopsis) VALUES (%s, %s, %s)',
     [
         ('Clube da Luta', 1999, 'Um homem deprimido que sofre de insônia conhece um estranho vendedor chamado Tyler Durden e se vê morando em uma casa suja depois que seu perfeito apartamento é destruído. A dupla forma um clube com regras rígidas onde homens lutam. A parceria perfeita é comprometida quando uma mulher, Marla, atrai a atenção de Tyler.'),
         ('Mad Max: Estrada da Fúria', 2015, 'Mad Max é uma franquia multi-media australiana do gênero ficção científica, contendo elementos de ação baseada em um futuro pós-apocalíptico, criada por James McCausland e George Miller. Começou em 1979 com o filme Mad Max, seguido por Mad Max 2: The Road Warrior e Mad Max Beyond Thunderdome.'),
@@ -38,5 +38,5 @@ for movie in cursor.fetchall():
     print(movie[1])
 
 # commitando senão nada tem efeito
-conexao.commit()
-conexao.close()
+cnx.commit()
+cnx.close()

@@ -1,19 +1,28 @@
 from flask import Flask, render_template, request,  redirect, session, flash, url_for
 
+from dao import MovieDao
+#from mysql.connector import MySQL
+from models import Movie
+
 app = Flask(__name__)
 app.secret_key = 'matrix'
+'''
+app.config['MYSQL_HOST'] = "localhost"
+app.config['MYSQL_USER'] = "root"
+app.config['MYSQL_PASSWORD'] = "password"
+app.config['MYSQL_DB'] = "movie_catalog"
+app.config['MYSQL_PORT'] = 3306
+'''
+#db = MySQL(app)
 
-#Classe filme
-class Filme:
-    def __init__(self, title, year, sinopsis):
-        self.title = title
-        self.year = year
-        self.sinopsis = sinopsis
+#movie_dao = MovieDao(db)
 
 
-filme1 = Filme('Godzilla', '1999', 'filme de monstro')
-filme2 = Filme('Pulp Fiction', '1987', 'Escrito e dirigido por Quentin tarantino')
-filme3 = Filme('Mad Max', '2017', 'Witness me')
+
+
+filme1 = Movie('Godzilla', '1999', 'filme de monstro')
+filme2 = Movie('Pulp Fiction', '1987', 'Escrito e dirigido por Quentin tarantino')
+filme3 = Movie('Mad Max', '2017', 'Witness me')
 lista = [filme1, filme2, filme3]
 
 #Main page: exhibits movies
@@ -35,7 +44,7 @@ def create():
     year = request.form['year']
     sinopsis = request.form['sinopsis']
     filme = Filme(title, year, sinopsis)
-    lista.append(filme)
+    movie_dao.salvar(movie)
     return redirect(url_for('index'))
 
 @app.route('/login')
